@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WatchEcommerce.Models.Product>
+
+@{
+    ViewData["Title"] = "Trang chủ - Cửa hàng đồng hồ";
+}
+
+<div class="jumbotron bg-light p-5 rounded-3 mb-4">
+    <div class="container-fluid py-3">
+        <h1 class="display-4">Chào mừng đến với WatchEcommerce</h1>
+        <p class="lead">Khám phá bộ sưu tập đồng hồ cao cấp từ các thương hiệu nổi tiếng thế giới</p>
+        <hr class="my-4">
+        <p>Chúng tôi cung cấp đồng hồ chính hãng với giá tốt nhất thị trường</p>
+        <a class="btn btn-primary btn-lg" asp-controller="Products" asp-action="Index" role="button">
+            Xem tất cả sản phẩm
+        </a>
+    </div>
+</div>
+
+<h2 class="mb-4">Sản phẩm nổi bật</h2>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@product.Brand</h6>
+                        <p class="card-text">
+                            <span class="badge bg-secondary">@product.Category?.CategoryName</span>
+                        </p>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text">
+                            <strong class="text-danger fs-5">@product.Price.ToString("N0") VNĐ</strong>
+                        </p>
+                        @if (product.StockQuantity > 0)
+                        {
+                            <span class="badge bg-success mb-2">Còn hàng</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger mb-2">Hết hàng</span>
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductID" class="btn btn-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info">
+                Chưa có sản phẩm nào.
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+        <h3>Danh mục sản phẩm</h3>
+        <div class="btn-group mt-3" role="group">
+            @if (ViewBag.Categories != null)
+            {
+                foreach (var category in ViewBag.Categories)
+                {
+                    <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.CategoryID" class="btn btn-outline-primary">
+                        @category.CategoryName
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
